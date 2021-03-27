@@ -1,0 +1,625 @@
+<!--
+    This is a single file application for computing the Law of Sines and Law of Cosines
+    Created by Jacob Ballew for MAT-172
+    March 28, 2021
+
+    Open in any web browser
+-->
+<html>
+
+<head>
+    <title>Law of Sines</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Train+One&display=swap" rel="stylesheet">
+</head>
+<style>
+    body {
+        font-family: Montserrat;
+        font-size: large;
+        background: linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%);
+    }
+
+    /* Header of page */
+    .header {
+        color: #000;
+        text-shadow: 1px 1px 2px #00C9FF;
+        text-align: center;
+        font-family: 'Lobster', cursive;
+        font-size: 56px;
+        padding-top: 0.5em;
+
+    }
+
+    /* Link to alt calculator underneath main logo */
+    .mini-header {
+        text-align: center;
+        font-family: 'Lobster', cursive;
+        font-size: large;
+        border: none;
+        outline: none;
+        color: #fff;
+        background: linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%);
+        width: 15%;
+        margin: auto;
+        display: block;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+        padding: 0.5em;
+        margin-top: 0.5em;
+        text-shadow: -1px -1px 0 #000,1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    .mini-header:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    /* Main wrapper for the page. Holds everything inside it */
+    .main-wrapper {
+        background-color: #fff;
+        padding: 1.5em;
+        width: 60%;
+        margin: auto;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    /* Container for the angle and side inputs */
+    .inputs-container {
+        display: flex;
+        width: 100%;
+        margin: auto;
+        /* border: 1px solid black; */
+    }
+
+    .inputs-container div {
+        padding: 1em;
+    }
+
+    .box {
+        width: 100%;
+    }
+
+    /* Container for the result output */
+    .results-container {
+        display: flex;
+        width: 100%;
+        margin: auto;
+    }
+
+    .results-list {
+        width: 100%;
+        background-color: aqua;
+    }
+
+    input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        font-size: medium;
+    }
+
+    .myButton {
+        font-family: 'Lobster', cursive;
+        background-color: #000000;
+        background: linear-gradient(90deg, #00d2ff 0%, rgb(46, 60, 212) 100%);
+        color: #fff;
+        width: 100%;
+        margin: 0 auto;
+        display: block;
+        font-size: xx-large;
+        font-weight: bold;
+        border: none;
+        padding: 13px 55px;
+        text-decoration: none;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        border-radius: 5px;
+        cursor: pointer;
+        outline: none;
+        text-shadow: -1px -1px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    }
+
+    .myButton:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .clear-button {
+        font-size: large;
+        font-weight: lighter;
+        font-family: 'Lobster', cursive;
+        margin: 0 auto;
+        display: block;
+        padding: 5px 10px;
+        background-color: #000000;
+        background-image: linear-gradient(315deg, #000000 0%, #181818 74%);
+        cursor: pointer;
+        outline: none;
+        color: #fff;
+        text-decoration: none;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        transition: 0.3s;
+        
+    }
+
+    .clear-button:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    /* Low res monitors */
+    @media all and (max-width: 1750px) and (min-width: 769px) {
+        .main-wrapper {
+            background-color: #fff;
+            padding: 1.5em;
+            width: 80%;
+            margin: auto;
+            border-radius: 0px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .mini-header {
+            width: 30%;
+        }
+    }
+
+    /* Moblie Devices */
+    @media only screen and (max-width: 600px) {
+        body {
+            width: 100%;
+        }
+
+        .main-wrapper {
+            background-color: #fff;
+            padding: 1.5em;
+            width: 100%;
+            margin: auto;
+            border-radius: 0px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .mini-header {
+            width: 50%;
+        }
+
+        .header {
+            font-size: xx-large;
+        }
+    }
+</style>
+
+<body>
+    <div id="page-header" class="header">
+        Law of Sines Calculator
+    </div>
+
+    <button id="calc-swap" class="mini-header" onclick="alternateCalculatorOption()">Law of Cosines Calculator</button>
+    <br>
+
+    <div class="main-wrapper">
+
+        <button class="clear-button" id="submit-button" onclick="refresh()">Refresh</button>
+
+        <!-- Div for the user angle inputs -->
+        <div class="inputs-container">
+            <div class="box">
+                <br>
+                <label>Angle A</label><br>
+                <input type="text" id="angleAinput" placeholder="angle A"><br>
+            </div>
+            <div class="box">
+                <br>
+                <label>Angle B</label><br>
+                <input type="text" id="angleBinput" placeholder="angle B"><br>
+            </div>
+            <div class="box">
+                <br>
+                <label>Angle C</label><br>
+                <input type="text" id="angleCinput" placeholder="angle C"><br>
+            </div>
+        </div>
+
+        <!-- Div for the user side inputs -->
+        <div class="inputs-container">
+            <div class="box">
+                <br>
+                <label>Side A</label><br>
+                <input type="text" id="sideAinput" placeholder="side A"><br>
+            </div>
+            <div class="box">
+                <br>
+                <label>Side B</label><br>
+                <input type="text" id="sideBinput" placeholder="side B"><br>
+            </div>
+            <div class="box">
+                <br>
+                <label>Side C</label><br>
+                <input type="text" id="sideCinput" placeholder="side C"><br>
+            </div>
+        </div>
+        <br>
+        <button class="myButton" id="submit-button" onclick="determineWhichCalculatorToUse()">Solve!</button>
+
+        <!-- Message output -->
+        <div class="results-container">
+            <p id="message-to-user"></p>
+        </div>
+    </div> <!-- End Main Wrapper -->
+
+    <script>
+        var calculatorSet = "LAW_OF_SINES";
+
+        // Angles and Side inputs
+        var angleA = 0;
+        var angleB = 0;
+        var angleC = 0;
+        var sideA = 0;
+        var sideB = 0;
+        var sideC = 0;
+
+        // Reserve Angles - If more than 1 triangle exists we need to reset back to original data except for the alt angle
+        var reserveAngleA = 0;
+        var reserveAngleB = 0;
+        var reserveAngleC = 0;
+        var reserveSideA = 0;
+        var reserveSideB = 0;
+        var reserveSideC = 0;
+
+        // If console logging should be enabled
+        var shouldLog = true;
+        var errorMessage
+
+        // Flags/variables specific to Law Of Sines
+        var moreThanOneSolution = false;
+        var angleFor2ndTriangle = 0;
+        var altAngle = 'Z';
+        var triangle1
+        var triangle2
+
+        function beginLawOfSines() {
+            log("Begin Law Of Sines");
+
+            // Get data from the input fields
+            angleA = getNumberFromInput('angleAinput');
+            angleB = getNumberFromInput('angleBinput');
+            angleC = getNumberFromInput('angleCinput');
+            sideA = getNumberFromInput('sideAinput');
+            sideB = getNumberFromInput('sideBinput');
+            sideC = getNumberFromInput('sideCinput');
+
+            reserveAngleA = angleA;
+            reserveAngleB = angleB;
+            reserveAngleC = angleC;
+            reserveSideA = sideA;
+            reserveSideB = sideB;
+            reserveSideC = sideC;
+
+            while (!continueSolving()) {
+                calculateLawOfSines();
+            }
+            triangle1 = { angleA: angleA, angleB: angleB, angleC: angleC, sideA: sideA, sideB: sideB, sideC: sideC };
+
+            // Add results to output
+            // If all data points are 1 then some error occurred -
+            if (angleA == 1 && angleB == 1 && angleC == 1 && sideA == 1 && sideB == 1 && sideC == 1) {
+                document.getElementById('message-to-user').innerHTML = errorMessage;
+            } else {
+                document.getElementById('message-to-user').innerHTML = "";
+            }
+
+            // If there is more than 1 solution then solve for the 2nd
+            // Reset variables back to user defined input with exception of the alt angle that was found
+            if (moreThanOneSolution && altAngle != 'Z') {
+                switch (altAngle) {
+                    case 'A':
+                        angleA = angleFor2ndTriangle;
+                        angleB = reserveAngleB;
+                        angleC = reserveAngleC;
+                        break;
+                    case 'B':
+                        angleA = reserveAngleA;
+                        angleB = angleFor2ndTriangle;
+                        angleC = reserveAngleC;
+                        break;
+                    case 'C':
+                        angleA = reserveAngleA;
+                        angleB = reserveAngleB;
+                        angleC = angleFor2ndTriangle;
+                        break;
+                }
+                sideA = reserveSideA;
+                sideB = reserveSideB;
+                sideC = reserveSideC;
+
+                while (!continueSolving()) {
+                    calculateLawOfSines();
+                }
+                document.getElementById('angleAinput').value = "";
+                document.getElementById('angleBinput').value = "";
+                document.getElementById('angleCinput').value = "";
+                document.getElementById('sideAinput').value = "";
+                document.getElementById('sideBinput').value = "";
+                document.getElementById('sideCinput').value = "";
+
+                triangle2 = { angleA: angleA, angleB: angleB, angleC: angleC, sideA: sideA, sideB: sideB, sideC: sideC };
+                var twoSolutionOutput = "There is more than 1 solution for the given values<br><hr><br>" +
+                    "Triangle 1<br><hr><br>" +
+                    "Angle A: " + triangle1.angleA + "<br>" +
+                    "Angle B: " + triangle1.angleB + "<br>" +
+                    "Angle C: " + triangle1.angleC + "<br>" +
+                    "Side  A: " + triangle1.sideA + "<br>" +
+                    "Side  B: " + triangle1.sideB + "<br>" +
+                    "Side  C: " + triangle1.sideC + "<br>" +
+                    "<br>Triangle 2<br><hr><br>" +
+                    "Angle A: " + triangle2.angleA + "<br>" +
+                    "Angle B: " + triangle2.angleB + "<br>" +
+                    "Angle C: " + triangle2.angleC + "<br>" +
+                    "Side  A: " + triangle2.sideA + "<br>" +
+                    "Side  B: " + triangle2.sideB + "<br>" +
+                    "Side  C: " + triangle2.sideC;
+                document.getElementById('message-to-user').innerHTML = twoSolutionOutput;
+            }
+        }
+
+        function beginLawOfCosines() {
+            log("Begin Law Of Cosines");
+            alert("hi there");
+        }
+        //----------------------------------
+        //  Function definitions
+        //----------------------------------
+
+        // Main function for calculating via LoS - It is called over and over until the triangle is solved
+        function calculateLawOfSines() {
+            if ((angleA + angleB + angleC) <= 180) {
+                // If at least 2 angles are present, the solve for the 3rd
+                findMissingAngle();
+
+                // Find a pair of known angle and side, if it doesn't exist then user must provide
+                var knownPair = findGivenPair();
+
+                if (findGivenPair() != null) {
+
+                    //Solve for Angle A and Side A
+                    if (sideA == 0 && notZero(angleA)) {
+                        sideA = solveAAS(knownPair.angle, knownPair.side, angleA);
+                        document.getElementById('sideAinput').value = sideA;
+                        checkOutput(sideA);
+                    }
+                    if (angleA == 0 && notZero(sideA)) {
+                        angleA = solveSSA(knownPair.angle, knownPair.side, sideA);
+                        document.getElementById('angleAinput').value = angleA;
+                        checkOutput(angleA);
+
+                        var possible2ndTriangleAngle = 180 - angleA;
+                        if ((180 - possible2ndTriangleAngle - knownPair.angle) > 0) {
+                            moreThanOneSolution = true;
+                            angleFor2ndTriangle = possible2ndTriangleAngle;
+                            altAngle = 'A';
+                        }
+                    }
+
+                    // Solve for Angle B and Side B
+                    if (sideB == 0 && notZero(angleB)) {
+                        sideB = solveAAS(knownPair.angle, knownPair.side, angleB);
+                        document.getElementById('sideBinput').value = sideB;
+                        checkOutput(sideB);
+                    }
+                    if (angleB == 0 && notZero(sideB)) {
+                        angleB = solveSSA(knownPair.angle, knownPair.side, sideB);
+                        document.getElementById('angleBinput').value = angleB;
+                        checkOutput(angleB);
+
+                        var possible2ndTriangleAngle = 180 - angleB;
+                        if ((180 - possible2ndTriangleAngle - knownPair.angle) > 0) {
+                            moreThanOneSolution = true;
+                            angleFor2ndTriangle = possible2ndTriangleAngle;
+                            altAngle = 'B';
+                        }
+                    }
+
+                    // Solve for Angle C and Side C
+                    if (sideC == 0 && notZero(angleC)) {
+                        sideC = solveAAS(knownPair.angle, knownPair.side, angleC);
+                        document.getElementById('sideCinput').value = sideC;
+                        checkOutput(sideC);
+                    }
+                    if (angleC == 0 && notZero(sideC)) {
+                        angleC = solveSSA(knownPair.angle, knownPair.side, sideC);
+                        document.getElementById('angleCinput').value = angleC;
+                        checkOutput(angleC);
+
+                        var possible2ndTriangleAngle = 180 - angleC;
+                        if ((180 - possible2ndTriangleAngle - knownPair.angle) > 0) {
+                            moreThanOneSolution = true;
+                            angleFor2ndTriangle = possible2ndTriangleAngle;
+                            altAngle = 'C';
+                        }
+                    }
+                } else {
+                    log("no known given pair");
+                    errorMessage = "<ul><li>Invalid or not enough information was provided</li></ul>";
+                    breakLoop();
+                }
+            } else {
+                errorMessage = "Oh no! The provided angles add to a value greater than 180.<br> Please check."
+                breakLoop();
+            }
+        }
+
+        // Main function for calculating via LoS
+        function calculateLawOfCosines() {
+
+        }
+
+        //---------------------------------------------------
+        //  Core functions for evaluating using Law of Sines
+        //---------------------------------------------------
+        function solveAAS(givenAngle, givenSide, angleOppositeMissingSide) {
+            var res = round((givenSide * Math.sin(toRadians(angleOppositeMissingSide)) / Math.sin(toRadians(givenAngle))));
+            return parseFloat(res);
+        }
+
+        function solveSSA(givenAngle, givenSide, sideOppositeMissingAngle) {
+            var p = (sideOppositeMissingAngle * Math.sin(toRadians(givenAngle))) / givenSide;
+            var res = round(parseFloat(toDegrees(Math.asin(p))));
+            return parseFloat(res);
+        }
+
+        // Once two angles are solved for, we can easily find the 3rd
+        function findMissingAngle() {
+            if (notZero(angleA) && notZero(angleB)) {
+                angleC = 180 - (angleA + angleB);
+                document.getElementById('angleCinput').value = angleC;
+            } else if (notZero(angleA) && notZero(angleC)) {
+                angleB = 180 - (angleA + angleC);
+                document.getElementById('angleBinput').value = angleB;
+            } else if (notZero(angleB) && notZero(angleC)) {
+                angleA = 180 - (angleB + angleC);
+                document.getElementById('angleAinput').value = angleA;
+            }
+        }
+
+        // User must pass at least 1 side and angle. This method finds which was given
+        function findGivenPair() {
+            if (notZero(angleA) && notZero(sideA)) {
+                return { angle: angleA, side: sideA }
+            } else if (notZero(angleB) && notZero(sideB)) {
+                return { angle: angleB, side: sideB }
+            } else if (notZero(angleC) && notZero(sideC)) {
+                return { angle: angleC, side: sideC }
+            } else {
+                return null;
+            }
+        }
+
+        // Function to check if all attributes of the triangle have been solved
+        function continueSolving() {
+            return (notZero(angleA) && notZero(angleB) && notZero(angleC) && notZero(sideA) && notZero(sideB) && notZero(sideC));
+        }
+
+        // Method to see if user passed zero as input
+        function notZero(val) {
+            return val > 0;
+        }
+
+        // Method to round to desired precision
+        function round(val) {
+            return val;
+        }
+
+        // Convert to Radians
+        function toRadians(degrees) {
+            return degrees * (Math.PI / 180);
+        };
+
+        // Convert to degrees
+        function toDegrees(rad) {
+            return rad / (Math.PI / 180);
+        };
+
+        // Logs message to browser console. Only if boolean is true
+        function log(message) {
+            if (shouldLog) {
+                console.log(message);
+            }
+        }
+
+        // Parses data from input fields. If value is NaN then return 0
+        function getNumberFromInput(elementId) {
+            var elem = parseFloat(document.getElementById(elementId).value);
+            if (isNaN(elem)) {
+                return 0;
+            }
+            return elem;
+        }
+
+        // Checks if the computed value is NaN (it could be NaN if the calculation is underfined) set error message
+        function checkOutput(o) {
+            if (isNaN(o)) {
+                log("Solution is IMPOSSIBLE with given inputs");
+                errorMessage = "Solution is IMPOSSIBLE with given inputs"
+                breakLoop();
+            }
+        }
+
+        // The loop is complete once all values are set. We can set them all to 1 to exit prematurely 
+        function breakLoop() {
+            sideA = 1;
+            sideB = 1;
+            sideC = 1;
+            angleA = 1;
+            angleB = 1;
+            angleC = 1;
+        }
+
+        // Print data from user input to browser console
+        function printData() {
+            log("Angle A: " + angleA + " Is type: " + typeof (angleA));
+            log("Angle B: " + angleB + " Is type: " + typeof (angleB));
+            log("Angle C: " + angleC + " Is type: " + typeof (angleC));
+            log("Side A: " + sideA + " Is type: " + typeof (sideA));
+            log("Side B: " + sideB + " Is type: " + typeof (sideB));
+            log("Side C: " + sideC + " Is type: " + typeof (sideC));
+        }
+
+        // Clear all input fields and reset variables
+        function refresh() {
+            angleA = 0;
+            angleB = 0;
+            angleC = 0;
+            sideA = 0;
+            sideB = 0;
+            sideC = 0;
+            reserveAngleA = 0;
+            reserveAngleB = 0;
+            reserveAngleC = 0;
+            reserveSideA = 0;
+            reserveSideB = 0;
+            reserveSideC = 0;
+            moreThanOneSolution = false;
+            angleFor2ndTriangle = 0;
+            altAngle = 'Z';
+            triangle1 = {};
+            triangle2 = {};
+            errorMessage = "";
+            document.getElementById('message-to-user').innerHTML = "";
+            document.getElementById('angleAinput').value = "";
+            document.getElementById('angleBinput').value = "";
+            document.getElementById('angleCinput').value = "";
+            document.getElementById('sideAinput').value = "";
+            document.getElementById('sideBinput').value = "";
+            document.getElementById('sideCinput').value = "";
+        }
+
+        function determineWhichCalculatorToUse() {
+            if (calculatorSet == "LAW_OF_SINES") {
+                return beginLawOfSines();
+            } else if (calculatorSet == "LAW_OF_COSINES") {
+                return beginLawOfCosines();
+            }
+        }
+
+        function alternateCalculatorOption() {
+            if (calculatorSet == "LAW_OF_SINES") {
+                refresh();
+                calculatorSet = "LAW_OF_COSINES";
+                document.getElementById('page-header').innerHTML = "Law of Cosines Calculator";
+                document.getElementById('calc-swap').innerHTML = "Law of Cosines Calculator"
+                document.body.style.backgroundImage = "radial-gradient( circle farthest-corner at 10% 20%,  rgba(0,52,89,1) 0%, rgba(0,168,232,1) 90% )"
+                document.getElementById('calc-swap').style.backgroundImage = "radial-gradient( circle farthest-corner at 10% 20%,  rgba(0,52,89,1) 0%, rgba(0,168,232,1) 90% )";
+
+            } else if (calculatorSet == "LAW_OF_COSINES") {
+                refresh();
+                calculatorSet = "LAW_OF_SINES";
+                document.getElementById('page-header').innerHTML = "Law of Sines Calculator";
+                document.getElementById('calc-swap').innerHTML = "Law of Sines Calculator"
+                document.body.style.background = "linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%)";
+                document.getElementById('calc-swap').style.backgroundImage = "linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%)";
+            }
+        }
+    </script>
+</body>
+
+</html>
